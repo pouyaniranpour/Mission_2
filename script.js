@@ -140,9 +140,10 @@ function playerMove(currentSquare, index) {
       isCrosses = false;
       boardState[index] = "X";
     } else {
-      currentSquare.textContent = "O";
-      isCrosses = true;
-      boardState[index] = "O";
+      // currentSquare.textContent = "O";
+      // isCrosses = true;
+      // boardState[index] = "O";
+
     }
     moveCounter++;
     if (isGameOver(boardState, moveCounter)) {
@@ -152,6 +153,10 @@ function playerMove(currentSquare, index) {
   } else {
     return;
   }
+}
+
+function computerMove(board){
+  ddd
 }
 
 function isGameOver(board, moves) {
