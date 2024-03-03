@@ -2,8 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
 body {
     /* background-color: black; */
-    display: grid;
+    display: flex;
     justify-content: center;
+    align-items: center;
 } 
 
 h1 {
@@ -11,6 +12,7 @@ h1 {
     text-align: center;
     font-family: 'Orbitron', Arial, sans-serif;
     font-size: 64px;
+    align-self: flex-start;
 }
 
 .grid-item {
@@ -29,7 +31,13 @@ h1 {
     display: inline-grid;
     grid-template-columns: auto auto auto;
     background-color: black;
-    padding: 10px;
-    justify-self: center;
+    padding: 10px;    
+  }
+
+
+
+  #resetBtn {
+    width: fit-content;
+    align-self: center;
   }
 

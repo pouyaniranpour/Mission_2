@@ -91,7 +91,7 @@ const squareEight = document.getElementById("squareEight");
 
 const announcement = document.getElementById("announcement");
 
-let gameIsActive = true;
+let gameIsOver = false;
 
 let moveCounter = 0;
 
@@ -187,27 +187,24 @@ function updateScenarios(board) {
 function action(currentSquare, board, index) {
   const updatedBoard = board;
   let compMoveIndex = 0; //index of computer's move
+
   console.log(index);
-  if (board[index] === "" && gameIsActive) {
+  if (board[index] === "" && !gameIsOver) {
     currentSquare.textContent = "X";
-    isCrosses = false;
     updatedBoard[index] = "X";
     moveCounter++;
-
-    isCrosses = false;
-    compMoveIndex = computerMove(board);
-    updatedBoard[compMoveIndex] = "O";
-    console.log(compMoveIndex);
-    squaresArray[compMoveIndex].textContent = "O";
-
-    console.log(updatedBoard);
-    moveCounter++;
+    gameIsOver = isGameOver(updatedBoard, moveCounter);      
+    if (!gameIsOver) {
+      compMoveIndex = computerMove(updatedBoard);
+      console.log(compMoveIndex);
+      squaresArray[compMoveIndex].textContent = "O";
+      moveCounter++;
+      console.log("move counter", moveCounter);
+      gameIsOver = isGameOver(updatedBoard, moveCounter);
+    }
   }
 
-  if (isGameOver(board, moveCounter)) {
-    gameIsActive = false;
-    //return updatedBoard;
-  }
+  console.log(updatedBoard);
 
   return updatedBoard;
 }
@@ -216,25 +213,36 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max); //returns a random number up to the max, not inclusive
 }
 
+
 function computerMove(board) {
   let freeSpaces = [];
   let y = 0;
   let moveIndex = 0;
+  let circleIndex = -1;
+  let scenarios = updateScenarios(board);
+  console.log("inside computer move", scenarios);
 
   for (let x = 0; x < board.length; x++) {
-    if (board[x] === "") {
+    if (board[x] === "" && board[x] !== 'X') {
       freeSpaces[y] = x;
       y++;
     } else {
       continue;
     }
   }
-  if (winningScenarios.includes("O")) {
-    let circleIndex = winningScenarios.indexOf("O");
+  console.log("free spaces", freeSpaces);
+  console.log(scenarios);
+
+  if (scenarios.includes("OO")) {
+    circleIndex = scenarios.indexOf("OO");
+    moveIndex = bestMove(circleIndex, freeSpaces);
+  } else if (scenarios.includes("O")) {
+    circleIndex = scenarios.indexOf("O");
+    console.log("circleIndex", circleIndex);
     moveIndex = bestMove(circleIndex, freeSpaces);
   } else {
-    moveIndex = getRandomInt(freeSpaces.length);
-  }
+    moveIndex = freeSpaces[getRandomInt(freeSpaces.length)];
+}
   console.log("move Index", moveIndex);
   return moveIndex;
 }
@@ -251,19 +259,21 @@ function bestMove(index, freeSpaces) {
     [0, 4, 8],
     [6, 4, 2],
   ];
-  for (let i = 0; i < movesArray[index].length; i++) {
-    console.log(index);
-    for (let x = 0; x < freeSpaces.length; x++) {
-      if (freeSpaces.includes(movesArray[[index][i]])) {
-        return i;
-      } else {
-        continue;
-      }
-    }
-  }
-}
 
-function isGameOver(board, moves) {
+  let innerArray = movesArray[index];
+  for (let i = 0; i < innerArray.length; i++) {
+    if (freeSpaces.includes(innerArray[i])) {
+      return innerArray[i];
+    } else {
+      continue;
+    }
+    
+  }
+};
+
+function isGameOver(board, moveNum) {
+  let scenarios = updateScenarios(board);
+  console.log("isGameOver called");
   // const topRow = `${boardState[0]}${boardState[1]}${boardState[2]}`; //top row elements
   // const middleRow = `${boardState[3]}${boardState[4]}${boardState[5]}`;
   // const bottomRow = `${boardState[6]}${boardState[7]}${boardState[8]}`;
@@ -284,16 +294,19 @@ function isGameOver(board, moves) {
   //   diagonalTwo,
   // ];
 
-  if (winningScenarios.includes("XXX")) {
+  if (scenarios.includes("XXX")) {
     console.log("Crosses has won!🎉🎊🥳");
     //fanfare.play();
     announcement.innerText = "CROSSES WINS!";
-  } else if (winningScenarios.includes("OOO")) {
+    return true;
+  } else if (scenarios.includes("OOO")) {
     console.log("Noughts has won!🎉🎊🥳");
     announcement.innerText = "NOUGHTS WINS!";
-  } else if (moveCounter === 9) {
+    return true;
+  } else if (moveCounter === 9 && !gameIsOver) {
     console.log("It's a draw!");
+    return true;
   } else {
-    return;
+    return false;
   }
 }
