@@ -30,9 +30,15 @@ const nameInputOverlay = document.getElementById("nameInputOverlay");
 const playerNameField = document.getElementById("playerName");
 const resetBtn = document.getElementById("resetBtn");
 
+let compMoveIndex = 0;
+
 nameInputBtn.addEventListener("click", function () {
   nameInputOverlay.style.display = "none";
-  playerNameField.innerText = nameInput.value;
+  if (nameInput.value === "") {
+    playerNameField.innerText = "Player";
+  } else {
+    playerNameField.innerText = nameInput.value;
+  }
 });
 
 nameInput.addEventListener("keypress", function (e) {
@@ -50,33 +56,32 @@ function resetBoard() {
   gameIsOver = false;
   moveCounter = 0;
   boardState = ["", "", "", "", "", "", "", "", ""];
-    for (const square in squaresArray) {
-      squaresArray[square].textContent = "";
-    };
-};
+  for (const square in squaresArray) {
+    squaresArray[square].textContent = "";
+  }
+}
 
-function resetScore (){
+function resetScore() {
   playerScore = 0;
   computerScore = 0;
   playerScoreDisplay.innerText = playerScore;
   computerScoreDisplay.innerText = computerScore;
-};
+}
 
-
-
-overlay.addEventListener("click", function () {  
+overlay.addEventListener("click", function () {
   overlay.style.display = "none";
-  resetBoard();  
+  resetBoard();
 });
-
 
 for (let i = 0; i < squaresArray.length; i++) {
   squaresArray[i].addEventListener("click", function () {
-    boardState = action(i);
+    compMoveIndex = action(i);
     console.log(boardState);
-    for (let x = 0; x < boardState.length; x++) {
-      squaresArray[x].textContent = boardState[x];
-    }
+    squaresArray[i].textContent = boardState[i];
+    popSound.play();
+    setTimeout(function () {
+      squaresArray[compMoveIndex].textContent = boardState[compMoveIndex];
+    }, 200);
   });
 }
 
@@ -104,7 +109,7 @@ function updateScenarios(board) {
 
 function action(index) {
   let board = boardState;
-  let compMoveIndex = 0; //index of computer's move
+  //let compMoveIndex = 0; //index of computer's move
 
   console.log(index);
   if (board[index] === "" && !gameIsOver) {
@@ -120,10 +125,9 @@ function action(index) {
       gameIsOver = isGameOver(board, moveCounter);
     }
   }
-
   //console.log(board);
 
-  return board;
+  return compMoveIndex;
 }
 
 function getRandomInt(max) {
@@ -190,36 +194,38 @@ function isGameOver(board, moveNum) {
 
   if (scenarios.includes("XXX")) {
     console.log("Crosses has won!🎉🎊🥳");
-    crossesWon();
+    displayFinal("crosses");
     playerScore++;
     playerScoreDisplay.innerHTML = `${playerScore}`;
     return true;
   } else if (scenarios.includes("OOO")) {
     console.log("Noughts has won!🎉🎊🥳");
-    noughtsWon();
+    displayFinal("noughts");
     computerScore++;
     computerScoreDisplay.innerHTML = `${computerScore}`;
     return true;
   } else if (moveCounter === 9 && !gameIsOver) {
     console.log("It's a draw!");
-    neitherWon();
+    displayFinal("draw");
     return true;
   } else {
     return false;
   }
 }
 
-function crossesWon() {
-  overlay.style.display = "block";
-  overlayText.innerHTML = "You win!!! 🎉🎊🥳 "
-}
-
-function noughtsWon() {
-  overlay.style.display = "block";
-  overlayText.innerText = "You lost!";
-}
-
-function neitherWon() {
-  overlay.style.display = "block";
-  overlayText.innerText = "It's a draw!";
+function displayFinal(outcome) {
+  if (outcome === "crosses") {
+    overlay.style.display = "block";
+    overlayText.innerHTML = "You win!!! 🎉🎊🥳 ";
+  } else if (outcome === "noughts") {
+    setTimeout(function () {
+      overlay.style.display = "block";
+      overlayText.innerText = "You lost!";
+    }, 500);
+  } else if (outcome === "draw") {
+    overlay.style.display = "block";
+    overlayText.innerText = "It's a draw!";
+  } else {
+    return;
+  }
 }
