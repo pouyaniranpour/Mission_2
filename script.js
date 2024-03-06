@@ -4,91 +4,6 @@
 //  6       7       8
 
 console.log("Connected");
-
-// const squareZero = {
-//     reference: document.querySelector('squareZero'),
-//     isAvailable: true,
-//     currentlyDisplaying: null,  //if displaying nothing, X, or O
-// }
-
-// const squareOne = {
-//     reference: document.querySelector('squareOne'),
-//     isAvailable: false,
-//     currentlyDisplaying: null,  //if displaying nothing, X, or O
-// }
-
-// const squareTwo = {
-//     reference: document.querySelector('squareTwo'),
-//     isAvailable: false,
-//     currentlyDisplaying: null,  //if displaying nothing, X, or O
-// }
-
-// const squareThree = {
-//     reference: document.querySelector('squareThree'),
-//     isAvailable: false,
-//     currentlyDisplaying: null,  //if displaying nothing, X, or O
-// }
-
-// const squareFour = {
-//     reference: document.querySelector('squareFour'),
-//     isAvailable: false,
-//     currentlyDisplaying: null,  //if displaying nothing, X, or O
-// }
-
-// const squareFive = {
-//     reference: document.querySelector('squareFive'),
-//     isAvailable: false,
-//     currentlyDisplaying: null,  //if displaying nothing, X, or O
-// }
-
-// const squareSix = {
-//     reference: document.querySelector('squareSix'),
-//     isAvailable: false,
-//     currentlyDisplaying: null,  //if displaying nothing, X, or O
-// }
-// const squareSeven = {
-//     reference: document.querySelector('squareSeven'),
-//     isAvailable: false,
-//     currentlyDisplaying: null,  //if displaying nothing, X, or O
-// }
-
-// const squareEight = {
-//     reference: document.querySelector('squareEight'),
-//     isAvailable: false,
-//     currentlyDisplaying: null,  //if displaying nothing, X, or O
-// }
-
-// let isAvailable = true;
-
-// let boardStatus = [
-//     [isAvailable, isAvailable, isAvailable], //Initialising the board status
-//     [isAvailable, isAvailable, isAvailable],
-//     [isAvailable, isAvailable, isAvailable]
-// ]
-
-// const squareZero = document.getElementById("squareZero");
-// squareZero.addEventListener('click', function () {
-//     if (isCrosses) {
-//         squareZero.textContent = "X";
-//         isCrosses = false;
-//     } else {
-//         squareZero.textContent = "O";
-//         isCrosses = true;
-//     }
-
-// });
-let isCrosses = true; //Current player is X i.e. Crosses
-
-const squareZero = document.getElementById("squareZero");
-const squareOne = document.getElementById("squareOne");
-const squareTwo = document.getElementById("squareTwo");
-const squareThree = document.getElementById("squareThree");
-const squareFour = document.getElementById("squareFour");
-const squareFive = document.getElementById("squareFive");
-const squareSix = document.getElementById("squareSix");
-const squareSeven = document.getElementById("squareSeven");
-const squareEight = document.getElementById("squareEight");
-
 const announcement = document.getElementById("announcement");
 
 let gameIsOver = false;
@@ -99,68 +14,71 @@ let boardState = ["", "", "", "", "", "", "", "", ""];
 
 let winningScenarios = [];
 
-squareZero.addEventListener("click", function () {
-  boardState = action(squareZero, boardState, 0);
-  console.log(boardState);
-  winningScenarios = updateScenarios(boardState);
-  console.log(winningScenarios);
+let playerScore = 0;
+let computerScore = 0;
+
+let playerScoreDisplay = document.getElementById("playerScore");
+let computerScoreDisplay = document.getElementById("computerScore");
+
+const squaresArray = document.getElementsByClassName("grid-item");
+
+const overlay = document.getElementById("overlay");
+const overlayText = document.getElementById("overlayText");
+const nameInputBtn = document.getElementById("nameInputBtn");
+const nameInput = document.getElementById("nameInput");
+const nameInputOverlay = document.getElementById("nameInputOverlay");
+const playerNameField = document.getElementById("playerName");
+const resetBtn = document.getElementById("resetBtn");
+
+nameInputBtn.addEventListener("click", function () {
+  nameInputOverlay.style.display = "none";
+  playerNameField.innerText = nameInput.value;
 });
 
-squareOne.addEventListener("click", function () {
-  boardState = action(squareOne, boardState, 1);
-  console.log(boardState);
-  winningScenarios = updateScenarios(boardState);
+nameInput.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    nameInputBtn.click();
+  }
 });
 
-squareTwo.addEventListener("click", function () {
-  boardState = action(squareTwo, boardState, 2);
-  winningScenarios = updateScenarios(boardState);
-  console.log(boardState);
-  console.log(winningScenarios);
+resetBtn.addEventListener("click", function () {
+  resetBoard();
+  resetScore();
 });
 
-squareThree.addEventListener("click", function () {
-  boardState = action(squareThree, boardState, 3);
-  console.log(boardState);
-  winningScenarios = updateScenarios(boardState);
+function resetBoard() {
+  gameIsOver = false;
+  moveCounter = 0;
+  boardState = ["", "", "", "", "", "", "", "", ""];
+    for (const square in squaresArray) {
+      squaresArray[square].textContent = "";
+    };
+};
+
+function resetScore (){
+  playerScore = 0;
+  computerScore = 0;
+  playerScoreDisplay.innerText = playerScore;
+  computerScoreDisplay.innerText = computerScore;
+};
+
+
+
+overlay.addEventListener("click", function () {  
+  overlay.style.display = "none";
+  resetBoard();  
 });
 
-squareFour.addEventListener("click", function () {
-  boardState = action(squareFour, boardState, 4);
-  winningScenarios = updateScenarios(boardState);
-});
 
-squareFive.addEventListener("click", function () {
-  boardState = action(squareFive, boardState, 5);
-  winningScenarios = updateScenarios(boardState);
-});
-
-squareSix.addEventListener("click", function () {
-  boardState = action(squareSix, boardState, 6);
-  winningScenarios = updateScenarios(boardState);
-});
-
-squareSeven.addEventListener("click", function () {
-  boardState = action(squareSeven, boardState, 7);
-  winningScenarios = updateScenarios(boardState);
-});
-
-squareEight.addEventListener("click", function () {
-  boardState = action(squareEight, boardState, 8);
-  winningScenarios = updateScenarios(boardState);
-});
-
-const squaresArray = [
-  squareZero,
-  squareOne,
-  squareTwo,
-  squareThree,
-  squareFour,
-  squareFive,
-  squareSix,
-  squareSeven,
-  squareEight,
-];
+for (let i = 0; i < squaresArray.length; i++) {
+  squaresArray[i].addEventListener("click", function () {
+    boardState = action(i);
+    console.log(boardState);
+    for (let x = 0; x < boardState.length; x++) {
+      squaresArray[x].textContent = boardState[x];
+    }
+  });
+}
 
 function updateScenarios(board) {
   let topRow = `${board[0]}${board[1]}${board[2]}`; //top row elements
@@ -184,48 +102,44 @@ function updateScenarios(board) {
   ];
 }
 
-function action(currentSquare, board, index) {
-  const updatedBoard = board;
+function action(index) {
+  let board = boardState;
   let compMoveIndex = 0; //index of computer's move
 
   console.log(index);
   if (board[index] === "" && !gameIsOver) {
-    currentSquare.textContent = "X";
-    updatedBoard[index] = "X";
+    board[index] = "X";
     moveCounter++;
-    gameIsOver = isGameOver(updatedBoard, moveCounter);      
+    gameIsOver = isGameOver(board, moveCounter);
     if (!gameIsOver) {
-      compMoveIndex = computerMove(updatedBoard);
+      compMoveIndex = computerMove(board);
       console.log(compMoveIndex);
-      squaresArray[compMoveIndex].textContent = "O";
+      board[compMoveIndex] = "O";
       moveCounter++;
       console.log("move counter", moveCounter);
-      gameIsOver = isGameOver(updatedBoard, moveCounter);
+      gameIsOver = isGameOver(board, moveCounter);
     }
   }
 
-  console.log(updatedBoard);
+  //console.log(board);
 
-  return updatedBoard;
+  return board;
 }
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max); //returns a random number up to the max, not inclusive
 }
 
-
 function computerMove(board) {
   let freeSpaces = [];
-  let y = 0;
   let moveIndex = 0;
   let circleIndex = -1;
   let scenarios = updateScenarios(board);
   console.log("inside computer move", scenarios);
 
   for (let x = 0; x < board.length; x++) {
-    if (board[x] === "" && board[x] !== 'X') {
-      freeSpaces[y] = x;
-      y++;
+    if (board[x] === "" && board[x] !== "X") {
+      freeSpaces.push(x);
     } else {
       continue;
     }
@@ -242,7 +156,7 @@ function computerMove(board) {
     moveIndex = bestMove(circleIndex, freeSpaces);
   } else {
     moveIndex = freeSpaces[getRandomInt(freeSpaces.length)];
-}
+  }
   console.log("move Index", moveIndex);
   return moveIndex;
 }
@@ -267,46 +181,45 @@ function bestMove(index, freeSpaces) {
     } else {
       continue;
     }
-    
   }
-};
+}
 
 function isGameOver(board, moveNum) {
   let scenarios = updateScenarios(board);
   console.log("isGameOver called");
-  // const topRow = `${boardState[0]}${boardState[1]}${boardState[2]}`; //top row elements
-  // const middleRow = `${boardState[3]}${boardState[4]}${boardState[5]}`;
-  // const bottomRow = `${boardState[6]}${boardState[7]}${boardState[8]}`;
-  // const firstCol = `${boardState[0]}${boardState[3]}${boardState[6]}`; //first column
-  // const secondCol = `${boardState[1]}${boardState[4]}${boardState[7]}`;
-  // const thirdCol = `${boardState[2]}${boardState[5]}${boardState[8]}`;
-  // const diagonalOne = `${boardState[0]}${boardState[4]}${boardState[8]}`;
-  // const diagonalTwo = `${boardState[6]}${boardState[4]}${boardState[2]}`;
-
-  // const winningScenarios = [
-  //   topRow,
-  //   middleRow,
-  //   bottomRow,
-  //   firstCol,
-  //   secondCol,
-  //   thirdCol,
-  //   diagonalOne,
-  //   diagonalTwo,
-  // ];
 
   if (scenarios.includes("XXX")) {
     console.log("Crosses has won!🎉🎊🥳");
-    //fanfare.play();
-    announcement.innerText = "CROSSES WINS!";
+    crossesWon();
+    playerScore++;
+    playerScoreDisplay.innerHTML = `${playerScore}`;
     return true;
   } else if (scenarios.includes("OOO")) {
     console.log("Noughts has won!🎉🎊🥳");
-    announcement.innerText = "NOUGHTS WINS!";
+    noughtsWon();
+    computerScore++;
+    computerScoreDisplay.innerHTML = `${computerScore}`;
     return true;
   } else if (moveCounter === 9 && !gameIsOver) {
     console.log("It's a draw!");
+    neitherWon();
     return true;
   } else {
     return false;
   }
+}
+
+function crossesWon() {
+  overlay.style.display = "block";
+  overlayText.innerHTML = "You win!!! 🎉🎊🥳 "
+}
+
+function noughtsWon() {
+  overlay.style.display = "block";
+  overlayText.innerText = "You lost!";
+}
+
+function neitherWon() {
+  overlay.style.display = "block";
+  overlayText.innerText = "It's a draw!";
 }

@@ -1,38 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Noughts and Crosses</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
-</head>
-<body>
-    
-        <h1>Noughts and Crosses</h1>
-        
-    
-    
- 
-    <div class="grid-container">
-        <div id="squareZero" class="grid-item"></div>
-        <div id="squareOne" class="grid-item"></div>
-        <div id="squareTwo" class="grid-item"></div>
-        <div id="squareThree" class="grid-item"></div>
-        <div id="squareFour" class="grid-item"></div>
-        <div id="squareFive"class="grid-item"></div>
-        <div id="squareSix"class="grid-item"></div>
-        <div id="squareSeven" class="grid-item"></div>
-        <div id="squareEight" class="grid-item"></div>     
-      </div>
-      <div id="announcement"></div>
-      <br>
-      <div>
-        <button id="resetBtn">Reset</button> 
-      </div>
-      
+  </head>
+  <body>
+    <h1>Noughts and Crosses</h1>
+    <div id="mainContainer">
 
-      
-    
-</body>
+    <div class="grid-container">
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+      <div class="grid-item"></div>
+    </div>
+
+    <table id="scoreContainer">
+      <thead>
+        <tr>
+          <th colspan="2">Score</th>
+        </tr>
+      </thead>
+      <tr>
+        <td id="playerName">Player</td>
+        <td id="playerScore">0</td>
+      </tr>
+      <tr>
+        <td>🤖</td>
+        <td id="computerScore">0</td>
+      </tr>
+      <tr>
+        <td colspan="2"><button id="resetBtn">Reset</button></td>
+      </tr>
+    </table>
+    </div>
+    <div id="overlay">
+      <div id="overlayText">Overlay Text</div>
+    </div>
+    <div id="nameInputOverlay">
+      <div id="nameInputContainer">        
+          <p style="color: white; text-align: center">Please enter your name:</p>
+        
+          <input id="nameInput" type="text">
+          
+          <button id="nameInputBtn">OK</button>        
+      </div>
+      <div>
+    </div>
+
+  </body>
 </html>
