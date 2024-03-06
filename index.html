@@ -10,7 +10,7 @@
   </head>
   <body>
     <h1>Noughts and Crosses</h1>
-    <div id="mainContainer">
+   
 
     <div class="grid-container">
       <div class="grid-item"></div>
@@ -24,7 +24,16 @@
       <div class="grid-item"></div>
     </div>
 
-    <table id="scoreContainer">
+    <div id="scoreContainer">
+      <div>
+      <span id="playerName">Player:</span><span id="playerScore">0</span>
+      <span>|</span>
+      <span>🤖:</span><span id="computerScore">0</span>
+      </div>
+      <div><button id="resetBtn">Reset</button></div>
+    </div>
+
+    <!-- <table id="scoreContainer">
       <thead>
         <tr>
           <th colspan="2">Score</th>
@@ -41,10 +50,10 @@
       <tr>
         <td colspan="2"><button id="resetBtn">Reset</button></td>
       </tr>
-    </table>
-    </div>
+    </table> -->
+    
     <div id="overlay">
-      <div id="overlayText">Overlay Text</div>
+      <div id="overlayText"></div>
     </div>
     <div id="nameInputOverlay">
       <div id="nameInputContainer">        

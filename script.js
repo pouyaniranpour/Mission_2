@@ -34,10 +34,8 @@ let compMoveIndex = 0;
 
 nameInputBtn.addEventListener("click", function () {
   nameInputOverlay.style.display = "none";
-  if (nameInput.value === "") {
-    playerNameField.innerText = "Player";
-  } else {
-    playerNameField.innerText = nameInput.value;
+  if (nameInput.value !== "") {
+    playerNameField.innerText = `${nameInput.value}:`;
   }
 });
 
@@ -76,9 +74,7 @@ overlay.addEventListener("click", function () {
 for (let i = 0; i < squaresArray.length; i++) {
   squaresArray[i].addEventListener("click", function () {
     compMoveIndex = action(i);
-    console.log(boardState);
     squaresArray[i].textContent = boardState[i];
-    popSound.play();
     setTimeout(function () {
       squaresArray[compMoveIndex].textContent = boardState[compMoveIndex];
     }, 200);
@@ -109,23 +105,17 @@ function updateScenarios(board) {
 
 function action(index) {
   let board = boardState;
-  //let compMoveIndex = 0; //index of computer's move
-
-  console.log(index);
   if (board[index] === "" && !gameIsOver) {
     board[index] = "X";
     moveCounter++;
     gameIsOver = isGameOver(board, moveCounter);
     if (!gameIsOver) {
       compMoveIndex = computerMove(board);
-      console.log(compMoveIndex);
       board[compMoveIndex] = "O";
       moveCounter++;
-      console.log("move counter", moveCounter);
       gameIsOver = isGameOver(board, moveCounter);
     }
   }
-  //console.log(board);
 
   return compMoveIndex;
 }
@@ -139,7 +129,6 @@ function computerMove(board) {
   let moveIndex = 0;
   let circleIndex = -1;
   let scenarios = updateScenarios(board);
-  console.log("inside computer move", scenarios);
 
   for (let x = 0; x < board.length; x++) {
     if (board[x] === "" && board[x] !== "X") {
@@ -148,25 +137,20 @@ function computerMove(board) {
       continue;
     }
   }
-  console.log("free spaces", freeSpaces);
-  console.log(scenarios);
 
   if (scenarios.includes("OO")) {
     circleIndex = scenarios.indexOf("OO");
     moveIndex = bestMove(circleIndex, freeSpaces);
   } else if (scenarios.includes("O")) {
     circleIndex = scenarios.indexOf("O");
-    console.log("circleIndex", circleIndex);
     moveIndex = bestMove(circleIndex, freeSpaces);
   } else {
     moveIndex = freeSpaces[getRandomInt(freeSpaces.length)];
   }
-  console.log("move Index", moveIndex);
   return moveIndex;
 }
 
 function bestMove(index, freeSpaces) {
-  console.log("free spaces", freeSpaces);
   const movesArray = [
     [0, 1, 2],
     [3, 4, 5],
@@ -190,22 +174,18 @@ function bestMove(index, freeSpaces) {
 
 function isGameOver(board, moveNum) {
   let scenarios = updateScenarios(board);
-  console.log("isGameOver called");
 
   if (scenarios.includes("XXX")) {
-    console.log("Crosses has won!🎉🎊🥳");
     displayFinal("crosses");
     playerScore++;
     playerScoreDisplay.innerHTML = `${playerScore}`;
     return true;
   } else if (scenarios.includes("OOO")) {
-    console.log("Noughts has won!🎉🎊🥳");
     displayFinal("noughts");
     computerScore++;
     computerScoreDisplay.innerHTML = `${computerScore}`;
     return true;
   } else if (moveCounter === 9 && !gameIsOver) {
-    console.log("It's a draw!");
     displayFinal("draw");
     return true;
   } else {
