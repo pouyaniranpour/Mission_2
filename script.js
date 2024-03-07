@@ -12,8 +12,6 @@ let moveCounter = 0;
 
 let boardState = ["", "", "", "", "", "", "", "", ""];
 
-let winningScenarios = [];
-
 let playerScore = 0;
 let computerScore = 0;
 
@@ -31,6 +29,17 @@ const playerNameField = document.getElementById("playerName");
 const resetBtn = document.getElementById("resetBtn");
 
 let compMoveIndex = 0;
+
+const movesArray = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [6, 4, 2],
+];
 
 nameInputBtn.addEventListener("click", function () {
   nameInputOverlay.style.display = "none";
@@ -82,26 +91,17 @@ for (let i = 0; i < squaresArray.length; i++) {
 }
 
 function updateScenarios(board) {
-  let topRow = `${board[0]}${board[1]}${board[2]}`; //top row elements
-  let middleRow = `${board[3]}${board[4]}${board[5]}`;
-  let bottomRow = `${board[6]}${board[7]}${board[8]}`;
-  let firstCol = `${board[0]}${board[3]}${board[6]}`; //first column
-  let secondCol = `${board[1]}${board[4]}${board[7]}`;
-  let thirdCol = `${board[2]}${board[5]}${board[8]}`;
-  let diagonalOne = `${board[0]}${board[4]}${board[8]}`;
-  let diagonalTwo = `${board[6]}${board[4]}${board[2]}`;
-
-  return [
-    topRow,
-    middleRow,
-    bottomRow,
-    firstCol,
-    secondCol,
-    thirdCol,
-    diagonalOne,
-    diagonalTwo,
-  ];
-}
+  let scenarioStr = "";
+  let combos = [];
+  for (let x = 0; x < movesArray.length; x++){
+    scenarioStr = "";
+    for (let y = 0; y < movesArray[x].length; y++) {
+      scenarioStr += board[movesArray[x][y]];
+    }
+    combos.push(scenarioStr);
+  }
+  return combos;
+};
 
 function action(index) {
   let board = boardState;
@@ -151,16 +151,6 @@ function computerMove(board) {
 }
 
 function bestMove(index, freeSpaces) {
-  const movesArray = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [6, 4, 2],
-  ];
 
   let innerArray = movesArray[index];
   for (let i = 0; i < innerArray.length; i++) {
